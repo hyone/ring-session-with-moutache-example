@@ -8,12 +8,11 @@
 
 
 (defn counter-handler [req]
-  (let [session (:session req)
-        cnt (inc (session :counter 0))
+  (let [cnt (inc (-> req :session (:counter 0)))
         res (response (format "You visited %d times:\n\n%s"
                         cnt
                         (with-out-str (pprint req))))]
-    (assoc res :session (assoc session :counter cnt))))
+    (assoc-in res [:session :counter] cnt)))
 
 (def myapp
   (app
